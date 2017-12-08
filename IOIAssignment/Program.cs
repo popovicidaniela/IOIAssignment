@@ -1,6 +1,7 @@
 ﻿using IOIAssignment.Data;
 using System;
 using System.Collections.Generic;
+using System.IO;
 
 namespace IOIAssignment
 {
@@ -8,21 +9,34 @@ namespace IOIAssignment
     {
         static void Main(string[] args)
         {
+            var reducedDatasetPath = "../../../reduced_dataset";
+            var wholeDatasetPath = "../../../dataset_kaggle";
+            
+            ProcessDataset(reducedDatasetPath);
+            ProcessDataset(wholeDatasetPath);
+            Console.ReadLine();
+        }
+
+        private static void ProcessDataset(string datasetPath)
+        {
             IData data = new Data.Data();
+            var watch = System.Diagnostics.Stopwatch.StartNew();
             List<Record> records = new List<Record>();
-            data.ImportData(ref records, "../../../reduced_dataset/block_4.csv");
-            data.ImportData(ref records, "../../../reduced_dataset/block_8.csv");
-            data.ImportData(ref records, "../../../reduced_dataset/block_15.csv");
-            data.ImportData(ref records, "../../../reduced_dataset/block_16.csv");
-            data.ImportData(ref records, "../../../reduced_dataset/block_23.csv");
-            data.ImportData(ref records, "../../../reduced_dataset/block_42.csv");
+
+            DirectoryInfo d = new DirectoryInfo(datasetPath);
+            foreach (var file in d.GetFiles("*.csv"))
+            {
+                data.ImportData(ref records, file.FullName);
+            }
 
             List<OutputRecord> result = data.ProcessData(records);
 
-            data.ExportData(result, "../../../results.csv");
+            data.ExportData(result, datasetPath + "/results.csv");
 
             Console.WriteLine(result.Count + " records have been exported.");
-            Console.ReadLine();
+            watch.Stop();
+            var elapsedMs = watch.ElapsedMilliseconds;
+            Console.WriteLine(elapsedMs + " ms for executing");
         }
     }
 }
