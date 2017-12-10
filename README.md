@@ -8,6 +8,10 @@ https://ioccocsharptest.blob.core.windows.net/datasets/london-smartmeters/reduce
 https://ioccocsharptest.blob.core.windows.net/datasets/london-smartmeters/dataset_kaggle.zip
 
 300 records have been exported.
+
 12760 ms for executing
+
 5566 records have been exported.
+
 243099 ms for executing
+
