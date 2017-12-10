@@ -15,3 +15,4 @@ https://ioccocsharptest.blob.core.windows.net/datasets/london-smartmeters/datase
 
 243099 ms for executing
 
+![Image of Diagnostics](https://github.com/popovicidaniela/IOIAssignment/blob/master/diagnostics.JPG)
