@@ -21,19 +21,19 @@ namespace IOIAssignment
         {
             IData data = new Data.Data();
             var watch = System.Diagnostics.Stopwatch.StartNew();
-            List<Record> records = new List<Record>();
 
+            var result = new List<OutputRecord>();
             DirectoryInfo d = new DirectoryInfo(datasetPath);
             foreach (var file in d.GetFiles("*.csv"))
             {
-                data.ImportData(ref records, file.FullName);
+                var records = new List<Record>();
+                var importedData = data.ImportData(records, file.FullName);
+                var processedRecords = data.ProcessData(records);
+                result.AddRange(processedRecords);                    
             }
-
-            List<OutputRecord> result = data.ProcessData(records);
-
-            data.ExportData(result, datasetPath + "/results.csv");
-
-            Console.WriteLine(result.Count + " records have been exported.");
+            var aggregatedResults = data.AggregateResults(result);
+            data.ExportData(aggregatedResults, datasetPath + "/Results.csv");
+            Console.WriteLine(aggregatedResults.Count + " records have been exported.");
             watch.Stop();
             var elapsedMs = watch.ElapsedMilliseconds;
             Console.WriteLine(elapsedMs + " ms for executing");

@@ -6,7 +6,7 @@ namespace IOIAssignment.Data
 {
     public class Data : IData
     {
-        public void ImportData(ref List<Record> records, string path)
+        public List<Record> ImportData(List<Record> records, string path)
         {
             using (var reader = new StreamReader(path))
             {
@@ -25,6 +25,7 @@ namespace IOIAssignment.Data
                     records.Add(record);
                 }
             }
+            return records;
         }
         public List<OutputRecord> ProcessData(List<Record> records)
         {
@@ -34,6 +35,17 @@ namespace IOIAssignment.Data
                                             BlockId = group.Key,
                                             NumberOfBlocks = group.Where(record => record.Kwh >= 1).Count(),
                                             KwhSum = group.Sum(record => record.Kwh)
+                                        }).OrderBy(outputRecord => outputRecord.BlockId).ToList();
+        }
+
+        public List<OutputRecord> AggregateResults(List<OutputRecord> records)
+        {
+            return records.GroupBy(record => record.BlockId).Select(group =>
+                                        new OutputRecord
+                                        {
+                                            BlockId = group.Key,
+                                            NumberOfBlocks = group.Sum(record => record.NumberOfBlocks),
+                                            KwhSum = group.Sum(record => record.KwhSum)
                                         }).OrderBy(outputRecord => outputRecord.BlockId).ToList();
         }
 
